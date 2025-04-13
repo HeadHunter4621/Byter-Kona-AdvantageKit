@@ -60,8 +60,8 @@ object Drivetrain: SubsystemBase() {
     }
 
     /** Runs the drive in open loop.  */
-    fun runOpenLoop(leftVolts: Double, rightVolts: Double) {
-        io?.setVoltage(leftVolts, rightVolts)
+    fun drive(leftSpeed: Double, rightSpeed: Double) {
+        io?.setSpeed(leftSpeed , rightSpeed)
     }
 
     /** Stops the drive.  */

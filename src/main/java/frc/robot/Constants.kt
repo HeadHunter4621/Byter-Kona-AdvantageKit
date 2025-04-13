@@ -6,11 +6,15 @@ import kotlin.random.Random
 object EditingConstants {
     const val INTAKE_SPEED = 1.0
     const val OUTTAKE_SPEED = -1.0
+    const val MAX_DRIVE_SPEED = 2
+    const val MAX_TURN_SPEED = 2
 }
 
 object PneumaticsConstants {
-    const val ARM_IN_ID = -1
-    const val ARM_OUT_ID = -1
+    const val ARM_FORWARD_CHANNEL = -1
+    const val ARM_REVERSE_CHANNEL = -1
+    const val KICKER_FORWARD_CHANNEL = -1
+    const val KICKER_REVERSE_CHANNEL = -1
 }
 
 object ArmRollerConstants {

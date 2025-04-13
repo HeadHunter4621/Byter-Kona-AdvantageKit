@@ -1,6 +1,14 @@
 package frc.robot.subsystems.drivetrain
 
+import frc.robot.EditingConstants
+
 object DrivetrainConstants {
+    const val MAX_DRIVE_SPEED = EditingConstants.MAX_DRIVE_SPEED
+    const val MAX_TURN_SPEED = EditingConstants.MAX_TURN_SPEED
+
+    const val SLEW_RATE_LIMIT = 3.0
+
+    const val DRIVETRAIN_OUTPUT_MULTIPLY = 1.0
 
     const val LEFT_LEADER_ID = -1
     const val LEFT_FOLLOWER_ID = -1

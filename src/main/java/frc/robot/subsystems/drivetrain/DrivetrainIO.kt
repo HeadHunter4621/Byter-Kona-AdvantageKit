@@ -1,10 +1,10 @@
 package frc.robot.subsystems.drivetrain
 
-import org.littletonrobotics.junction.AutoLog
+import org.team9432.annotation.Logged
 
 interface DrivetrainIO {
-    @AutoLog
-    class DrivetrainIOInputs {
+    @Logged
+    open class DrivetrainIOInputs {
         var leftLeaderAppliedVolts = 0.0
         var leftFollowerAppliedVolts = 0.0
 
@@ -12,8 +12,12 @@ interface DrivetrainIO {
         var rightFollowerAppliedVolts = 0.0
     }
 
-    fun updateInputs(inputs: DrivetrainIOInputs?) {}
+    fun updateInputs(inputs: DrivetrainIOInputs) {}
+
+    fun setSpeed(leftSpeed: Double, rightSpeed: Double) {}
 
     fun setVoltage(leftVolts: Double, rightVolts: Double) {}
+
+    fun stop() {}
 
 }

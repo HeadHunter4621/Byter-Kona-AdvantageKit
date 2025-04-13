@@ -1,17 +1,18 @@
-package frc.robot.subsystems.drivetrain
+package org.sert2521.reefscape2025.subsystems.drivetrain
 
 import com.studica.frc.AHRS
-import com.studica.frc.AHRS.NavXComType
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.util.Units
+import frc.robot.subsystems.drivetrain.DrivetrainConstants
+import frc.robot.subsystems.drivetrain.GyroIO
 
-class GyroIONavX {
-    private val navX = AHRS(NavXComType.kMXP_SPI)
+class GyroIONavX: GyroIO {
+    /* If you're here and have a problem with the gyro, just call software lead */
+    private val imu = AHRS(AHRS.NavXComType.kUSB1, DrivetrainConstants.ODOMETRY_FREQUENCY)
 
-    @Override
-    fun updateInputs(inputs: GyroIO.GyroIOInputs) {
-        inputs.connected = navX.isConnected
-        inputs.yawPosition = Rotation2d.fromDegrees(-navX.angle)
-        inputs.yawVelocityRadPerSec = Units.degreesToRadians(-navX.rawGyroZ.toDouble())
+    override fun updateInputs(inputs: GyroIO.GyroIOInputs){
+        inputs.connected = imu.isConnected
+        inputs.yawPosition = Rotation2d.fromDegrees(-imu.angle)
+        inputs.yawVelocityRadPerSec = Units.degreesToRadians(-imu.rate)
     }
 }

@@ -18,7 +18,7 @@ object Drivetrain: SubsystemBase() {
     private var io: DrivetrainIO? = null
     private val inputs: LoggedDrivetrainIOInputs = LoggedDrivetrainIOInputs()
     private var gyroIO: GyroIO? = null
-    private val gyroInputs: GyroIOInputsAutoLogged = GyroIOInputsAutoLogged()
+    private val gyroInputs: LoggedGyroIOInputs = LoggedGyroIOInputs()
 
     private val kinematics: DifferentialDriveKinematics = DifferentialDriveKinematics(DrivetrainConstants.TRACK_WIDTH)
     private val poseEstimator = DifferentialDrivePoseEstimator(kinematics, Rotation2d(), 0.0, 0.0, Pose2d())
@@ -56,25 +56,7 @@ object Drivetrain: SubsystemBase() {
         gyroIO?.updateInputs(gyroInputs)
         Logger.processInputs("Drive", inputs)
         Logger.processInputs("Drive/Gyro", inputs)
-
-        // Update gyro angle
-        if (gyroInputs.connected) {
-            // Use the real gyro angle
-            rawGyroRotation = gyroInputs.yawPosition
-        } else {
-            // Use the angle delta from the kinematics and module deltas
-            val twist =
-                kinematics.toTwist2d(
-                    getLeftPositionMeters() - lastLeftPositionMeters,
-                    getRightPositionMeters() - lastRightPositionMeters
-                )
-            rawGyroRotation = rawGyroRotation.plus(Rotation2d(twist.dtheta))
-            lastLeftPositionMeters = getLeftPositionMeters()
-            lastRightPositionMeters = getRightPositionMeters()
-        }
-
-        // Update odometry
-        poseEstimator.update(rawGyroRotation, getLeftPositionMeters(), getRightPositionMeters())
+        rawGyroRotation = gyroInputs.yawPosition
     }
 
     /** Runs the drive in open loop.  */
@@ -108,39 +90,4 @@ object Drivetrain: SubsystemBase() {
         return getPose().rotation
     }
 
-    /** Resets the current odometry pose.  */
-    fun setPose(pose: Pose2d?) {
-        poseEstimator.resetPosition(
-            rawGyroRotation, getLeftPositionMeters(), getRightPositionMeters(), pose
-        )
-    }
-
-    /** Returns the position of the left wheels in meters.  */
-    @AutoLogOutput
-    fun getLeftPositionMeters(): Double {
-        return inputs.leftPositionRad * DrivetrainConstants.WHEEL_RADIUS
-    }
-
-    /** Returns the position of the right wheels in meters.  */
-    @AutoLogOutput
-    fun getRightPositionMeters(): Double {
-        return inputs.rightPositionRad * DrivetrainConstants.WHEEL_RADIUS
-    }
-
-    /** Returns the velocity of the left wheels in meters/second.  */
-    @AutoLogOutput
-    fun getLeftVelocityMetersPerSec(): Double {
-        return inputs.leftVelocityRadPerSec * DrivetrainConstants.WHEEL_RADIUS
-    }
-
-    /** Returns the velocity of the right wheels in meters/second.  */
-    @AutoLogOutput
-    fun getRightVelocityMetersPerSec(): Double {
-        return inputs.rightVelocityRadPerSec * DrivetrainConstants.WHEEL_RADIUS
-    }
-
-    /** Returns the average velocity in radians/second.  */
-    fun getCharacterizationVelocity(): Double {
-        return (inputs.leftVelocityRadPerSec + inputs.rightVelocityRadPerSec) / 2.0
-    }
 }

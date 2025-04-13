@@ -27,30 +27,6 @@ object Drivetrain: SubsystemBase() {
     private var lastLeftPositionMeters = 0.0
     private var lastRightPositionMeters = 0.0
 
-    fun Drive(io: DrivetrainIO?, gyroIO: GyroIO?) {
-        this.io = io
-        this.gyroIO = gyroIO
-
-        // Configure SysId
-        sysId =
-            SysIdRoutine(
-                SysIdRoutine.Config(
-                    null,
-                    null,
-                    null
-                ) { state: SysIdRoutineLog.State ->
-                    Logger.recordOutput(
-                        "Drive/SysIdState",
-                        state.toString()
-                    )
-                },
-                Mechanism(
-                    { voltage: Voltage -> runOpenLoop(voltage.`in`(Units.Volts), voltage.`in`(Units.Volts)) }, null,
-                    this
-                )
-            )
-    }
-
     override fun periodic() {
         io?.updateInputs(inputs)
         gyroIO?.updateInputs(gyroInputs)
@@ -66,7 +42,7 @@ object Drivetrain: SubsystemBase() {
 
     /** Stops the drive.  */
     fun stop() {
-        runOpenLoop(0.0, 0.0)
+        io?.stop()
     }
 
     /** Returns a command to run a quasistatic test in the specified direction.  */

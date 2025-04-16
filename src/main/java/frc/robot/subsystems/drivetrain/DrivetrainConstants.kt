@@ -4,13 +4,17 @@ import com.ctre.phoenix6.signals.InvertedValue
 import frc.robot.EditingConstants
 
 object DrivetrainConstants {
+    const val STATOR_CURRENT_LIMIT = 100.0
+    const val SUPPLY_CURRENT_LIMIT = 40.0
+
     const val MAX_DRIVE_SPEED = EditingConstants.MAX_DRIVE_SPEED
     const val MAX_TURN_SPEED = EditingConstants.MAX_TURN_SPEED
-
-    const val SUPPLY_CURRENT_LIMIT = 40.0
-    const val STATOR_CURRENT_LIMIT = 100.0
-
     const val SLEW_RATE_LIMIT = 3.0
+
+    const val P = 0.0
+    const val D = 0.0
+
+    const val OUTPUT_REDUCTION_MULTIPLY = 1.0
 
     const val DRIVETRAIN_OUTPUT_MULTIPLY = 1.0
 

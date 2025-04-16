@@ -1,7 +1,5 @@
 package frc.robot.subsystems.drivetrain
 
-import com.ctre.phoenix.motorcontrol.InvertType
-import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX
 import com.ctre.phoenix6.BaseStatusSignal
 import com.ctre.phoenix6.configs.TalonFXConfiguration
 import com.ctre.phoenix6.controls.Follower
@@ -26,35 +24,42 @@ class DrivetrainIOTalonFX: DrivetrainIO {
         config.CurrentLimits.SupplyCurrentLimit = DrivetrainConstants.SUPPLY_CURRENT_LIMIT
         config.CurrentLimits.SupplyCurrentLimitEnable = true
         config.MotorOutput.NeutralMode = NeutralModeValue.Brake
-        config.Feedback.SensorToMechanismRatio = motorReduction
-        config.Slot0.kP = realKp
-        config.Slot0.kD = realKd
+        config.Feedback.SensorToMechanismRatio = DrivetrainConstants.OUTPUT_MULTIPLY
+        config.Slot0.kP = DrivetrainConstants.P
+        config.Slot0.kD = DrivetrainConstants.D
 
         config.MotorOutput.Inverted =
-            if (DrivetrainConstants.in) InvertedValue.Clockwise_Positive else InvertedValue.CounterClockwise_Positive
-        tryUntilOk(5) { leftLeader.configurator.apply(config, 0.25) }
-        tryUntilOk(5) { leftFollower.configurator.apply(config, 0.25) }
+            if (DrivetrainConstants.LEFT_INVERTED)
+                InvertedValue.Clockwise_Positive
+            else
+                InvertedValue.CounterClockwise_Positive
+        leftLeader.configurator.apply(config, 0.25)
+        leftFollower.configurator.apply(config, 0.25)
 
         config.MotorOutput.Inverted =
-            if (rightInverted) InvertedValue.Clockwise_Positive else InvertedValue.CounterClockwise_Positive
-        tryUntilOk(5) { rightLeader.configurator.apply(config, 0.25) }
-        tryUntilOk(5) { rightFollower.configurator.apply(config, 0.25) }
+            if (DrivetrainConstants.RIGHT_INVERTED) {
+                InvertedValue.Clockwise_Positive
+            } else {
+                InvertedValue.CounterClockwise_Positive
+            }
+        rightLeader.configurator.apply(config, 0.25)
+        rightFollower.configurator.apply(config, 0.25)
 
         leftFollower.setControl(Follower(leftLeader.deviceID, false))
         rightFollower.setControl(Follower(rightLeader.deviceID, false))
 
         BaseStatusSignal.setUpdateFrequencyForAll(
             50.0,
-            leftPosition,
-            leftVelocity,
-            leftAppliedVolts,
-            leftLeaderCurrent,
-            leftFollowerCurrent,
-            rightPosition,
-            rightVelocity,
-            rightAppliedVolts,
-            rightLeaderCurrent,
-            rightFollowerCurrent
+            leftLeader.position,
+            leftLeader.velocity,
+            leftLeader.motorVoltage,
+            leftLeader.statorCurrent, // May need to be supplyCurrent
+            leftFollower.statorCurrent, // May need to be supplyCurrent
+            rightLeader.position,
+            rightLeader.velocity,
+            rightLeader.motorVoltage,
+            rightLeader.statorCurrent, // May need to be supplyCurrent
+            rightFollower.statorCurrent // May need to be supplyCurrent
         )
         leftLeader.optimizeBusUtilization()
         leftFollower.optimizeBusUtilization()
@@ -79,16 +84,18 @@ class DrivetrainIOTalonFX: DrivetrainIO {
         inputs.leftPositionRad = Units.rotationsToRadians(leftLeader.position.valueAsDouble)
         inputs.leftVelocityRadPerSec = Units.rotationsToRadians(leftLeader.velocity.valueAsDouble)
         inputs.leftAppliedVolts = leftLeader.motorVoltage.valueAsDouble
-        inputs.leftCurrentAmps =
-            doubleArrayOf(leftLeader.supplyCurrent.valueAsDouble, leftLeader.supplyCurrent.valueAsDouble)
+        inputs.leftCurrentAmps = doubleArrayOf(
+            leftLeader.supplyCurrent.valueAsDouble,
+            leftLeader.supplyCurrent.valueAsDouble
+        )
 
         inputs.rightPositionRad = Units.rotationsToRadians(rightLeader.position.valueAsDouble)
         inputs.rightVelocityRadPerSec = Units.rotationsToRadians(rightLeader.velocity.valueAsDouble)
         inputs.rightAppliedVolts = rightLeader.motorVoltage.valueAsDouble
-        inputs.rightCurrentAmps =
-            doubleArrayOf(
-                rightLeader.supplyCurrent.valueAsDouble, rightFollower.supplyCurrent.valueAsDouble
-            )
+        inputs.rightCurrentAmps = doubleArrayOf(
+            rightLeader.supplyCurrent.valueAsDouble,
+            rightFollower.supplyCurrent.valueAsDouble
+        )
     }
 
     override fun setSpeed(leftSpeed: Double, rightSpeed: Double) {

@@ -31,7 +31,6 @@ object JoystickDriveDrive: Command() {
         }
     }
 
-
     override fun initialize() {
 
         driveSlewRateLimiter.reset(0.0)
@@ -39,8 +38,8 @@ object JoystickDriveDrive: Command() {
     }
 
     override fun execute() {
-        val yIn = driveSlewRateLimiter.calculate(DrivetrainConstants.DRIVETRAIN_OUTPUT_MULTIPLY * (Input.getRightY()))
-        val xIn = turnSlewRatelimiter.calculate(DrivetrainConstants.DRIVETRAIN_OUTPUT_MULTIPLY * (Input.getLeftX()))
+        val yIn = driveSlewRateLimiter.calculate(DrivetrainConstants.OUTPUT_MULTIPLY * (Input.getRightY()))
+        val xIn = turnSlewRatelimiter.calculate(DrivetrainConstants.OUTPUT_MULTIPLY * (Input.getLeftX()))
 
         leftSpeedOut = yIn * DrivetrainConstants.MAX_DRIVE_SPEED + xIn * DrivetrainConstants.MAX_TURN_SPEED
         rightSpeedOut = yIn * DrivetrainConstants.MAX_DRIVE_SPEED - xIn * DrivetrainConstants.MAX_TURN_SPEED

@@ -7,7 +7,7 @@ import org.littletonrobotics.junction.Logger
 
 object ArmRoller: SubsystemBase() {
 
-    private val io = ArmRollerIOVictorSPX()
+    private val io = ArmRollerIOTalonSRX()
     private val ioInputs = LoggedArmRollerIOInputs()
 
     init {}

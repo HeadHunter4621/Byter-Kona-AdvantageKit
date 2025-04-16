@@ -1,12 +1,13 @@
 package frc.robot.subsystems.arm_roller
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX
 import frc.robot.ArmRollerConstants
 import frc.robot.subsystems.arm_roller.ArmRollerIO.ArmRollerIOInputs
 
-class ArmRollerIOVictorSPX: ArmRollerIO {
+class ArmRollerIOTalonSRX: ArmRollerIO {
 
-    private val motor = WPI_VictorSPX(ArmRollerConstants.ARM_ROLLER_ID)
+    private val motor = WPI_TalonSRX(ArmRollerConstants.ARM_ROLLER_ID)
 
     init {
         motor.inverted = ArmRollerConstants.ARM_ROLLER_INVERTED

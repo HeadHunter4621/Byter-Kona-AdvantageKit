@@ -18,7 +18,7 @@ class DrivetrainIOTalonFX: DrivetrainIO {
 
     init {
 
-        leftConfig.MotorOutput.Inverted = DrivetrainConstants.rightInvertedState
+        leftConfig.MotorOutput.Inverted = DrivetrainConstants.leftInvertedState
         rightConfig.MotorOutput.Inverted = DrivetrainConstants.rightInvertedState
 
         leftConfig.CurrentLimits.StatorCurrentLimit = DrivetrainConstants.STATOR_CURRENT_LIMIT

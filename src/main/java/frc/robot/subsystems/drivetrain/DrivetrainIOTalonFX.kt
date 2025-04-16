@@ -3,6 +3,7 @@ package frc.robot.subsystems.drivetrain
 import com.ctre.phoenix.motorcontrol.InvertType
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX
 import com.ctre.phoenix6.configs.TalonFXConfiguration
+import com.ctre.phoenix6.controls.Follower
 import com.ctre.phoenix6.hardware.TalonFX
 import com.ctre.phoenix6.signals.InvertedValue
 
@@ -26,6 +27,9 @@ class DrivetrainIOTalonFX: DrivetrainIO {
 
         leftConfig.CurrentLimits.SupplyCurrentLimit = DrivetrainConstants.SUPPLY_CURRENT_LIMIT
         rightConfig.CurrentLimits.SupplyCurrentLimit = DrivetrainConstants.SUPPLY_CURRENT_LIMIT
+
+        leftLeader.setControl(Follower(leftFollower.deviceID, false))
+        rightLeader.setControl(Follower(rightFollower.deviceID, false))
 
         leftLeader.configurator.apply(leftConfig)
         leftFollower.configurator.apply(leftConfig)

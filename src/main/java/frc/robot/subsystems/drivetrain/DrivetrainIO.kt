@@ -5,11 +5,7 @@ import org.team9432.annotation.Logged
 interface DrivetrainIO {
     @Logged
     open class DrivetrainIOInputs {
-        var leftLeaderAppliedVolts = 0.0
-        var leftFollowerAppliedVolts = 0.0
 
-        var rightLeaderAppliedVolts = 0.0
-        var rightFollowerAppliedVolts = 0.0
     }
 
     fun updateInputs(inputs: DrivetrainIOInputs) {}

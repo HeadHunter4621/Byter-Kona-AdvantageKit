@@ -33,13 +33,6 @@ class DrivetrainIOTalonFX: DrivetrainIO {
         rightFollower.configurator.apply(rightConfig)
     }
 
-    override fun updateInputs(inputs: DrivetrainIO.DrivetrainIOInputs) {
-        inputs.leftLeaderAppliedVolts = leftLeader.supplyVoltage()
-        inputs.leftFollowerAppliedVolts = leftFollower.motorOutputVoltage
-        inputs.rightLeaderAppliedVolts = rightLeader.motorOutputVoltage
-        inputs.rightFollowerAppliedVolts = rightFollower.motorOutputVoltage
-    }
-
     override fun setSpeed(leftSpeed: Double, rightSpeed: Double) {
         leftLeader.set(leftSpeed)
         rightLeader.set(rightSpeed)
